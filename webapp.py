@@ -1,16 +1,17 @@
 import os
-
 from bottle import run, template, static_file, route, get
 
 import coolwebservices
 
 HOST = '0.0.0.0'
-PORT = 8080
+PORT = port=int(os.environ.get("PORT", 5000))
+
 pubnub = {
     'pubnub_publish_key': os.environ.get('pubnub_publish_key', None),
     'pubnub_subscribe_key': os.environ.get('pubnub_subscribe_key', None),
     'pubnub_channel': os.environ.get('pubnub_channel', None)
 }
+
 
 @route('/static/<filepath:path>')
 def server_static(filepath):
@@ -19,7 +20,6 @@ def server_static(filepath):
 
 @get('/')
 def get_fredsez():
-
     return template('fredsez', **pubnub)
 
 
