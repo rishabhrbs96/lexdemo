@@ -1,0 +1,29 @@
+.container {
+    width: 600px;
+    margin: 30px auto 0 auto;
+}
+
+body {
+    background-color: rgb(153, 0, 48);
+    color: #ffffff;
+}
+
+input {
+    color: #444444;
+}
+
+#message, #name {
+    width: 100%;
+}
+
+#box-row {
+    margin-bottom: 20px;
+}
+
+#box {
+    background-color: #ffffff;
+    color: #444444;
+    font-size: 1.2em;
+    height: 300px;
+    overflow-y: scroll;
+}

@@ -1,0 +1,27 @@
+GoatsLife
+how is goat
+{name}
+
+WeatherForecast
+what is the forecast
+which city
+{city}
+what is the forcast for {city}
+
+Airline
+what is the flight status
+which airline
+{airline}
+what is the flight status for {airline}
+
+airline
+American
+FedEx
+United
+Alaska
+Allegiant
+Delta
+Frontier
+Hawaiian
+JetBlue
+Southwest
