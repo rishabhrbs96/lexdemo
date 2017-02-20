@@ -26,30 +26,7 @@ class MySubscribeCallback(SubscribeCallback):
             message_start = message.message.split()[2]
             if message_start == chatbot_handle:
                 print("relevant message located...")
-
-                from_handle = message.message.split()[0]
-                user = from_handle[1:]
-                utterance = ' '.join(message.message.split()[3:])
-
-                print("asking lex...")
-                intent = lex.ask_lex(utterance, user).json()
-
-                print("intent type: %s"%intent['dialogState'])
-                if intent['dialogState'] == 'ReadyForFulfillment':
-
-                    print("intent name: %s" % intent['intentName'])
-                    if intent['intentName'] == 'AirlineStatus':
-                        response = requests.get(coolservices_url+'/airline/'+intent['slots']['airline'], timeout=10)
-                        result = response.json()
-                        pubnub.publish().channel(pnchannel).message(chatbot_handle+' - '+from_handle+' '+result['message']).async(my_publish_callback)
-
-                    elif intent['intentName'] == 'WeatherForecast':
-                        response = requests.get(coolservices_url+'/weather/'+intent['slots']['city'], timeout=10)
-                        result = response.json()
-                        pubnub.publish().channel(pnchannel).message(chatbot_handle+' - '+from_handle+' '+result['message']).async(my_publish_callback)
-
-                elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
-                    pubnub.publish().channel(pnchannel).message(chatbot_handle+' - '+from_handle+' '+intent['message']).async(my_publish_callback)
+                pubnub.publish().channel(pnchannel).message(chatbot_handle + ' - echo ' + message.message).async(my_publish_callback)
 
         except IndexError:
             pass # do nothing
