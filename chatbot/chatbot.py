@@ -14,6 +14,8 @@ pubnub = PubNub(pnconfig)
 
 pnchannel = os.environ.get('pubnub_channel', None)
 
+coolservices_url = 'https://fredsez.herokuapp.com'
+
 chatbot_handle = '@fred'
 
 
@@ -33,12 +35,12 @@ class MySubscribeCallback(SubscribeCallback):
                 if intent['dialogState'] == 'ReadyForFulfillment':
 
                     if intent['intentName'] == 'AirlineStatus':
-                        response = requests.get('http://0.0.0.0:8080/airline/'+intent['slots']['airline'])
+                        response = requests.get(coolservices_url+'/airline/'+intent['slots']['airline'], timeout=10)
                         result = response.json()
                         pubnub.publish().channel(pnchannel).message(chatbot_handle+' - '+from_handle+' '+result['message']).async(my_publish_callback)
 
                     elif intent['intentName'] == 'WeatherForecast':
-                        response = requests.get('http://0.0.0.0:8080/weather/'+intent['slots']['city'])
+                        response = requests.get(coolservices_url+'/weather/'+intent['slots']['city'], timeout=10)
                         result = response.json()
                         pubnub.publish().channel(pnchannel).message(chatbot_handle+' - '+from_handle+' '+result['message']).async(my_publish_callback)
 

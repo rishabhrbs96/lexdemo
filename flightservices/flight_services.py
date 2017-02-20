@@ -52,7 +52,7 @@ def get_active_flights(airline_code):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'
     }
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, timeout=10)
     response_obj = response.json()
     flights = [v for k, v in response_obj.items() if isinstance(v, list)]
     flights = [clean_flight_data(x) for x in flights]

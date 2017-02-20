@@ -1,5 +1,9 @@
+appdirs==1.4.0
 aws-requests-auth==0.3.0
-bottle==0.12.9
-psycopg2==2.6.1
-requests==2.9.1
-SQLAlchemy==1.0.12
+bottle==0.12.13
+packaging==16.8
+pubnub==4.0.7
+pycryptodomex==3.4.3
+pyparsing==2.1.10
+requests==2.13.0
+six==1.10.0
