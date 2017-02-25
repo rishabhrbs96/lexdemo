@@ -1,10 +1,10 @@
 .container {
-    width: 600px;
+    width: 900px;
     margin: 30px auto 0 auto;
 }
 
 body {
-    background-color: rgb(153, 0, 48);
+    background-color: rgb(98, 46, 153);
     color: #ffffff;
 }
 
@@ -16,14 +16,66 @@ input {
     width: 100%;
 }
 
-#box-row {
+#name {
+    background-color: rgba(172, 73, 255, 0.34);
+    color: white;
+}
+
+.box-row {
     margin-bottom: 20px;
 }
 
-#box {
+#name::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #ffffff;
+}
+
+#name:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ffffff;
+    opacity: 1;
+}
+
+#name::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ffffff;
+    opacity: 1;
+}
+
+#name::-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #ffffff;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.box-col {
     background-color: #ffffff;
     color: #444444;
-    font-size: 1.2em;
+    font-size: 1em;
     height: 300px;
     overflow-y: scroll;
+}
+
+.form-control {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.form-control:focus {
+    border-color: rgba(255, 255, 255, 1.0);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0), 0 0 8px rgba(0, 0, 0, 0);
+}
+
+.handle {
+    color: purple;
+    width: 100px;
+    margin-right: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.message {
+    color: #444;
 }
