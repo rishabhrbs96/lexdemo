@@ -21,8 +21,10 @@ var app = {
         $('#box').scrollTop($('#box')[0].scrollHeight);
     },
     'chatbotListener': function(obj){
-        $('#bot').append('<pre>'+JSON.stringify(obj.message, null, ' ')+'</pre>');
-        $('#bot').scrollTop($('#bot')[0].scrollHeight);
+        if($('#monitor-slider').val()=='1'){
+            $('#bot').append('<pre>'+JSON.stringify(obj.message, null, ' ')+'</pre>');
+            $('#bot').scrollTop($('#bot')[0].scrollHeight);
+        }
     },
     'publishMessage': function(e){
         if ((e.keyCode || e.charCode) === 13) {
