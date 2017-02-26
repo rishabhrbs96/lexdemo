@@ -35,7 +35,7 @@
         </div>
         <div class="col-md-5 col-md-offset-1">
             <div class="row box-row">
-                <div class="col-xs-12 box-col">&nbsp;</div>
+                <div id="bot" class="col-xs-12 box-col"></div>
             </div>
         </div>
     </div>
@@ -45,7 +45,8 @@
 <script>
     var PUBNUB_PUBLISH_KEY = '{{pubnub_publish_key}}';
     var PUBNUB_SUBSCRIBE_KEY = '{{pubnub_subscribe_key}}';
-    var PUBNUB_CHANNEL = '{{pubnub_channel}}';
+    var PUBNUB_CHATROOM_CHANNEL = '{{pubnub_chatroom_channel}}';
+    var PUBNUB_CHATBOT_CHANNEL = '{{pubnub_chatbot_channel}}';
 </script>
 <script src="static/app.js"></script>
 </body>

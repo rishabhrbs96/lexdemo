@@ -1,15 +1,28 @@
 
 var app = {
+    'chatroom' : {},
+    'chatbot' : {},
     'init': function(){
-        this.channel = PUBNUB_CHANNEL;
-        this.pubnub =  new PubNub({ publishKey : PUBNUB_PUBLISH_KEY, subscribeKey : PUBNUB_SUBSCRIBE_KEY});
-        this.pubnub.addListener({message:this.channelListener});
-        this.pubnub.subscribe({channels:[this.channel]});
+        this.chatroomChannel = PUBNUB_CHATROOM_CHANNEL;
+        this.chatroom =  new PubNub({ publishKey : PUBNUB_PUBLISH_KEY, subscribeKey : PUBNUB_SUBSCRIBE_KEY});
+        // this.chatroom =  new PubNub({ publishKey : 'demo', subscribeKey : 'demo'});
+        this.chatroom.addListener({message:this.chatroomListener});
+        this.chatroom.subscribe({channels:[this.chatroomChannel]});
+
+        this.chatbotChannel = PUBNUB_CHATBOT_CHANNEL;
+        this.chatbot =  new PubNub({ subscribeKey : PUBNUB_SUBSCRIBE_KEY});
+        this.chatbot.addListener({message:this.chatbotListener});
+        this.chatbot.subscribe({channels:[this.chatbotChannel]});
+
         $('#message').keyup(this.publishMessage);
     },
-    'channelListener': function(obj){
+    'chatroomListener': function(obj){
         $('#box').append(''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' ))+'<br/>');
         $('#box').scrollTop($('#box')[0].scrollHeight);
+    },
+    'chatbotListener': function(obj){
+        $('#bot').append('<pre>'+JSON.stringify(obj.message, null, ' ')+'</pre>');
+        $('#bot').scrollTop($('#bot')[0].scrollHeight);
     },
     'publishMessage': function(e){
         if ((e.keyCode || e.charCode) === 13) {
@@ -18,7 +31,7 @@ var app = {
             var sez = $('#message').val();
             sez = (sez=='')?'sez nothing':sez;
             var message = '@'+name+' '+sez;
-            app.pubnub.publish({channel: app.channel, message: message,x : ($('#message').val(''))});
+            app.chatroom.publish({channel: app.chatroomChannel, message: message,x : ($('#message').val(''))});
         }
     },
     'formatMessage': function(message){

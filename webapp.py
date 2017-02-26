@@ -9,7 +9,8 @@ PORT = port=int(os.environ.get("PORT", 5000))
 pubnub = {
     'pubnub_publish_key': os.environ.get('pubnub_publish_key', None),
     'pubnub_subscribe_key': os.environ.get('pubnub_subscribe_key', None),
-    'pubnub_channel': os.environ.get('pubnub_channel', None)
+    'pubnub_chatroom_channel': os.environ.get('pubnub_chatroom_channel', None),
+    'pubnub_chatbot_channel': os.environ.get('pubnub_chatbot_channel', None)
 }
 
 

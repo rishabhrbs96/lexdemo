@@ -80,11 +80,7 @@ input {
 
 .handle {
     color: purple;
-    width: 100px;
     margin-right: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .message {
