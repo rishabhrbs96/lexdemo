@@ -24,4 +24,5 @@ def get_fredsez():
     return template('fredsez', **pubnub)
 
 
-run(host=HOST, port=PORT)
+if __name__=='__main__':
+    run(host=HOST, port=PORT)
