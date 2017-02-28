@@ -1,7 +1,10 @@
 import os
-from bottle import run, template, static_file, route, get
+from bottle import run, template, static_file, route, get, TEMPLATE_PATH
 
 import coolwebservices
+
+
+TEMPLATE_PATH.insert(0, os.environ.get('template_path','./views'))
 
 HOST = '0.0.0.0'
 PORT = port=int(os.environ.get("PORT", 5000))
