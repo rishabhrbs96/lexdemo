@@ -19,7 +19,7 @@ pubnub = {
 
 @route('/static/<filepath:path>')
 def server_static(filepath):
-    return static_file(filepath, root='./static')
+    return static_file(filepath, root=os.environ.get("static_path", "./static"))
 
 
 @get('/')
