@@ -14,6 +14,15 @@ which airline
 {airline}
 what is the flight status for {airline}
 
+FedExRate
+what is the shipping rate from {fromCity} to {toCity}
+how much is it to ship from {fromCity} to {toCity}
+What city would you like to ship from?
+What city would you like to ship to?
+
+
+Slot Lists
+
 airline
 American
 FedEx
