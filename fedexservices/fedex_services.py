@@ -1,7 +1,7 @@
 import os
 import requests
 
-rate_url = 'https://purplepromise.xyz/fedexrate/%s/%s'
+rate_url = 'https://purplepromise.xyz/rate/%s/%s'
 
 
 def get_rate_details(from_city, to_city):
