@@ -6,7 +6,7 @@ rate_url = 'https://purplepromise.xyz/rate/%s/%s'
 
 def get_rate_details(from_city, to_city):
     try:
-        response = requests.get(rate_url % (from_city, to_city))
+        response = requests.get(rate_url % (from_city, to_city), timeout=10)
         rate = response.json()
         message = rate['message']
         return {'message': message}

@@ -53,6 +53,7 @@ class MySubscribeCallback(SubscribeCallback):
                         result = response.json()
                         pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
+
                     elif intent['intentName'] == 'FedExRate':
                         self.log_it("Calling FedEx rate service...")
                         response = requests.get(coolservices_url+'/fedexrate/'+intent['slots']['fromCity']+'/'+intent['slots']['toCity'], timeout=10)
