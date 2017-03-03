@@ -15,7 +15,7 @@ pubnub = PubNub(pnconfig)
 pn_chatroom_channel = os.environ.get('pubnub_chatroom_channel', None)
 pn_chatbot_channel = os.environ.get('pubnub_chatbot_channel', None)
 
-coolservices_url = 'https://fredsez.herokuapp.com'
+coolservices_url = 'https://lex.purplepromise.xyz'
 
 chatbot_handle = '@fred'
 
