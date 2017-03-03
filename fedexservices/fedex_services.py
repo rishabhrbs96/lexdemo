@@ -15,5 +15,5 @@ def get_rate_details(from_city, to_city):
 
 
 if __name__ == '__main__':
-    rate= get_rate('New York City', 'Phoenix')
+    rate= get_rate_details('New York City', 'Phoenix')
     print(str(rate))
