@@ -17,7 +17,7 @@ var app = {
         $('#message').keyup(this.publishMessage);
     },
     'chatroomListener': function(obj){
-        $('#box').append(''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' ))+'<br/>');
+        $('#box').append(''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' )));
         $('#box').scrollTop($('#box')[0].scrollHeight);
     },
     'chatbotListener': function(obj){
@@ -41,7 +41,7 @@ var app = {
         var handle = tokens[0];
         tokens.splice(0,1);
         var remaining = tokens.join(' ');
-        return "<span class='handle'>"+handle+"</span><span class='message'>"+remaining+"</span>"
+        return "<div class='message-wrapper'><span class='handle'>"+handle+"</span><span class='message'>"+remaining+"</span></div>"
     }
 };
 $(document).ready(app.init());

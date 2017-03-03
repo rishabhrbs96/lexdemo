@@ -87,6 +87,11 @@ input {
     font-size: 1.2em;
 }
 
+.message-wrapper {
+    margin-bottom: 3px;
+    border-bottom: 1px solid #dddddd;
+}
+
 .handle {
     color: purple;
     margin-right: 3px;
