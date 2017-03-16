@@ -14,6 +14,7 @@ pubnub = PubNub(pnconfig)
 
 pn_chatroom_channel = os.environ.get('pubnub_chatroom_channel', None)
 pn_chatbot_channel = os.environ.get('pubnub_chatbot_channel', None)
+pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
 
 coolservices_url = 'https://lex.purplepromise.xyz'
 
@@ -60,7 +61,13 @@ class MySubscribeCallback(SubscribeCallback):
                         result = response.json()
                         pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
-
+                    elif intent['intentName'] == 'RobotIntent':
+                        self.log_it("Publish to robot service...")
+                        direction = intent['slots']['direction'].lower()
+                        pubnub.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
+                        message_action = direction if direction in ('rotate left', 'rotate right', 'stop') else 'go %s'%direction
+                        pubnub.publish().channel(pn_chatroom_channel).message('%s %s is asking robot to %s.'%(chatbot_handle, from_handle, message_action)).async(my_publish_callback)
+                        self.log_it("%s - %s"%(intent['intentName'],direction))
 
                 elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
                     pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle + ' ' + from_handle + ' ' + intent['message']).async(my_publish_callback)
