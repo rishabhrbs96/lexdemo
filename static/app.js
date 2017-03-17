@@ -41,6 +41,7 @@ var app = {
         var handle = tokens[0];
         var myHandle = '@'+$('#name').val();
         var alignment = handle==myHandle? 'text-right' : 'text-left';
+        var messageTime = new Date();
         if(handle==myHandle){
             var bubble = 'me-bubble';
         } else if(handle=='@fred') {
@@ -50,7 +51,7 @@ var app = {
         }
         tokens.splice(0,1);
         var remaining = tokens.join(' ');
-        return "<div class='"+bubble+"'>"+remaining+"</div><div class='"+alignment+"'><strong>"+handle+"</strong> 11:44:33</div>";
+        return "<div class='"+bubble+"'>"+remaining+"</div><div class='"+alignment+"'><strong>"+handle+"</strong>  "+messageTime.toLocaleString()+"</div>";
     }
 };
 $(document).ready(app.init());
