@@ -13,6 +13,39 @@ body {
     margin: 30px auto 0 auto;
 }
 
+.fred-bubble {
+    border: 0px solid;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
+    color: #ffffff;
+    background-color: #db8600;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.other-bubble {
+    border: 0px solid;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
+    color: #777777;
+    background-color: #dddddd;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.me-bubble {
+    border: 0px solid;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border-bottom-left-radius: 1em;
+    color: #ffffff;
+    background-color: #007cd4;
+    margin-top: 10px;
+    padding: 5px;
+}
+
 @media (min-width: 768px) {
     .container {
         width: 700px;

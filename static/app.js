@@ -39,9 +39,36 @@ var app = {
     'formatMessage': function(message){
         var tokens = message.split(' ');
         var handle = tokens[0];
+        var myHandle = '@'+$('#name').val();
+        var alignment = handle==myHandle? 'text-right' : 'text-left';
+        if(handle==myHandle){
+            var bubble = 'me-bubble';
+        } else if(handle=='@fred') {
+            bubble = 'fred-bubble';
+        } else {
+            bubble = 'other-bubble';
+        }
         tokens.splice(0,1);
         var remaining = tokens.join(' ');
-        return "<div class='message-wrapper'><span class='handle'>"+handle+"</span><span class='message'>"+remaining+"</span></div>"
+        return "<div class='"+bubble+"'>"+remaining+"</div><div class='"+alignment+"'><strong>"+handle+"</strong> 11:44:33</div>";
     }
 };
 $(document).ready(app.init());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
