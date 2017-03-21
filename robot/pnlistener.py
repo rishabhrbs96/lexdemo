@@ -63,12 +63,18 @@ class MySubscribeCallback(SubscribeCallback):
     def status(self, pubnub, status):
         if status.category == PNStatusCategory.PNUnexpectedDisconnectCategory:
             pass  # This event happens when radio / connectivity is lost
+            #pubnub.reconnect()
+        elif status.category == PNStatusCategory.PNTimeoutCategory:
+            pass
+            #pubnub.reconnect()
         elif status.category == PNStatusCategory.PNConnectedCategory:
             pass
         elif status.category == PNStatusCategory.PNReconnectedCategory:
             pass
         elif status.category == PNStatusCategory.PNDecryptionErrorCategory:
             pass
+        else:
+            print("some other status: %d" % status)  # some other status
 
     def log_it(self, content):
         print(str(content))
@@ -83,6 +89,15 @@ def my_publish_callback(envelope, status):
         pass  # Handle message publish error. Check 'category' property to find out possible issue
 
 
-print("starting gopi listenr...")
-pubnub.add_listener(MySubscribeCallback())
-pubnub.subscribe().channels([pn_robot_channel]).execute()
+if __name__ == '__main__':
+    print("starting pnlistener...")
+    pubnub.add_listener(MySubscribeCallback())
+    pubnub.subscribe().channels([pn_robot_channel]).execute()
+    print('end')
+    # for i in range(5):
+    #     try:
+    #         print('pnlistener try %s' % i)
+    #         pubnub.add_listener(MySubscribeCallback())
+    #         pubnub.subscribe().channels([pn_robot_channel]).execute()
+    #     except Exception as e:
+    #         print('pubnub %d broke: %s' % (i, str(e)))
