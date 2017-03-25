@@ -44,14 +44,17 @@ var app = {
         var messageTime = new Date();
         if(handle==myHandle){
             var bubble = 'me-bubble';
+            var bottom = 'me-bottom';
         } else if(handle=='@fred') {
             bubble = 'fred-bubble';
+            bottom = 'fred-bottom';
         } else {
             bubble = 'other-bubble';
+            bottom = 'other-bottom'
         }
         tokens.splice(0,1);
         var remaining = tokens.join(' ');
-        return "<div class='"+bubble+"'>"+remaining+"</div><div class='"+alignment+"'><strong>"+handle+"</strong>  "+messageTime.toLocaleString()+"</div>";
+        return "<div class='"+bubble+"'>"+remaining+"</div><div class='"+bottom+" clearfix'><div class='pointy-thing-left'></div><div class='pointy-thing-right'></div></div><div class='"+alignment+"'><strong>"+handle+"</strong>  "+messageTime.toLocaleString()+"</div>";
     }
 };
 $(document).ready(app.init());

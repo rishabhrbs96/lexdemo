@@ -14,36 +14,102 @@ body {
 }
 
 .fred-bubble {
-    border: 0px solid;
-    border-top-left-radius: 1em;
-    border-top-right-radius: 1em;
-    border-bottom-right-radius: 1em;
+    border: 0 solid;
+    border-radius: 1em;
     color: #ffffff;
     background-color: #db8600;
     margin-top: 10px;
-    padding: 5px;
+    padding: 5px 5px 0 5px;
+}
+
+.fred-bottom {
+    border: 0 solid;
+    background-color: #db8600;
+    padding: 0;
+}
+
+.fred-bottom .pointy-thing-left {
+    border: 0 solid;
+    border-top-right-radius: 1em;
+    background-color: #ffffff;
+    height: 1em;
+    width: 5%;
+    float: left;
+}
+
+.fred-bottom .pointy-thing-right {
+    border: 0 solid;
+    border-top-left-radius: 1em;
+    background-color: #ffffff;
+    height: 1em;
+    width: 95%;
+    float: right;
 }
 
 .other-bubble {
-    border: 0px solid;
-    border-top-left-radius: 1em;
-    border-top-right-radius: 1em;
-    border-bottom-right-radius: 1em;
+    border: 0 solid;
+    border-radius: 1em;
     color: #777777;
     background-color: #dddddd;
     margin-top: 10px;
     padding: 5px;
 }
 
-.me-bubble {
-    border: 0px solid;
-    border-top-left-radius: 1em;
+.other-bottom {
+    border: 0 solid;
+    background-color: #dddddd;
+    padding: 0 ;
+}
+
+.other-bottom .pointy-thing-left {
+    border: 0 solid;
     border-top-right-radius: 1em;
-    border-bottom-left-radius: 1em;
+    background-color: #ffffff;
+    height: 1em;
+    width: 5%;
+    float: left;
+}
+
+.other-bottom .pointy-thing-right {
+    border: 0 solid;
+    border-top-left-radius: 1em;
+    background-color: #ffffff;
+    height: 1em;
+    width: 95%;
+    float: right;
+}
+
+.me-bubble {
+    border: 0 solid;
+    border-radius: 1em;
     color: #ffffff;
     background-color: #007cd4;
     margin-top: 10px;
     padding: 5px;
+}
+
+.me-bottom {
+    border: 0 solid;
+    background-color: #007cd4;
+    padding: 0;
+}
+
+.me-bottom .pointy-thing-left {
+    border: 0 solid;
+    border-top-right-radius: 1em;
+    background-color: #ffffff;
+    height: 1em;
+    width: 95%;
+    float:left;
+}
+
+.me-bottom .pointy-thing-right {
+    border: 0 solid;
+    border-top-left-radius: 1em;
+    background-color: #ffffff;
+    height: 1em;
+    width: 5%;
+    float:right;
 }
 
 @media (min-width: 768px) {

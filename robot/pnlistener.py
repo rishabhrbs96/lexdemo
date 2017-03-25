@@ -1,5 +1,5 @@
 import os
-from time import sleep
+import time
 
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
@@ -18,40 +18,50 @@ pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
 
 
 class MySubscribeCallback(SubscribeCallback):
+    CRAB_DURATION = 4
+    TURN_DURATION = 1
+    FAST_SPEED = 200
+    SLOW_SPEED = 150
+
     def message(self, pubnub, message):
         try:
             action = message.message.lower()
             if 'forward' in action:
                 gopigo_client.fwd()
-                sleep(2)
+                time.sleep(self.CRAB_DURATION)
                 gopigo_client.stop()
             elif 'backward' in action:
                 gopigo_client.bwd()
-                sleep(2)
+                time.sleep(self.CRAB_DURATION)
                 gopigo_client.stop()
+            elif 'rotate' in action:
+                if 'left' in action:
+                    gopigo_client.left_rot()
+                    time.sleep(self.TURN_DURATION)
+                    gopigo_client.stop()
+                elif 'right in action':
+                    gopigo_client.right_rot()
+                    time.sleep(self.TURN_DURATION)
+                    gopigo_client.stop()
             elif 'left' in action:
                 gopigo_client.left()
-                sleep(2)
+                time.sleep(self.TURN_DURATION)
                 gopigo_client.stop()
             elif 'right' in action:
                 gopigo_client.right()
-                sleep(2)
-                gopigo_client.stop()
-            elif 'rotate left' in action:
-                gopigo_client.left_rot()
-                sleep(2)
-                gopigo_client.stop()
-            elif 'rotate right' in action:
-                gopigo_client.right_rot()
-                sleep(2)
+                time.sleep(self.TURN_DURATION)
                 gopigo_client.stop()
             elif 'stop' in action:
                 gopigo_client.stop()
             elif 'blink' in action:
                 pass
+            elif 'faster' in action:
+                gopigo_client.set_speed(self.FAST_SPEED)
+            elif 'slower' in action:
+                gopigo_client.set_speed(self.SLOW_SPEED)
             else:
                 pass
-            self.log_it({'action': action})
+            self.log_it(self.get_status(action))
         except IndexError:
             pass  # do nothing
         except Exception as e:
@@ -62,11 +72,13 @@ class MySubscribeCallback(SubscribeCallback):
 
     def status(self, pubnub, status):
         if status.category == PNStatusCategory.PNUnexpectedDisconnectCategory:
+            print("Connectivity lost...")
             pass  # This event happens when radio / connectivity is lost
-            #pubnub.reconnect()
+            pubnub.reconnect()
         elif status.category == PNStatusCategory.PNTimeoutCategory:
+            print("PN Timeout...")
             pass
-            #pubnub.reconnect()
+            pubnub.reconnect()
         elif status.category == PNStatusCategory.PNConnectedCategory:
             pass
         elif status.category == PNStatusCategory.PNReconnectedCategory:
@@ -76,10 +88,19 @@ class MySubscribeCallback(SubscribeCallback):
         else:
             print("some other status: %d" % status)  # some other status
 
-    def log_it(self, content):
+    @staticmethod
+    def log_it(content):
         print(str(content))
         # todo get stats - ultrasonic, voltage, last direction, image
         pubnub.publish().channel(pn_chatbot_channel).message(content).async(my_publish_callback)
+
+    @staticmethod
+    def get_status(action):
+        result = {}
+        result['voltage'] = gopigo_client.volt()
+        result['distance'] = gopigo_client.us_dist(0)
+        result['action'] = action
+        return result
 
 
 def my_publish_callback(envelope, status):
@@ -90,14 +111,12 @@ def my_publish_callback(envelope, status):
 
 
 if __name__ == '__main__':
+    print("waiting 30 seconds for network connectivity...")
+    time.sleep(30)
+    print("initialize robot...")
+    gopigo_client.servo(90)
+    gopigo_client.set_speed(MySubscribeCallback.SLOW_SPEED)
     print("starting pnlistener...")
     pubnub.add_listener(MySubscribeCallback())
     pubnub.subscribe().channels([pn_robot_channel]).execute()
     print('end')
-    # for i in range(5):
-    #     try:
-    #         print('pnlistener try %s' % i)
-    #         pubnub.add_listener(MySubscribeCallback())
-    #         pubnub.subscribe().channels([pn_robot_channel]).execute()
-    #     except Exception as e:
-    #         print('pubnub %d broke: %s' % (i, str(e)))
