@@ -36,9 +36,9 @@ var app = {
     'publishMessage': function(e){
         e.preventDefault();
         var name = $('#name').val().replace(/[^A-Z|a-z]/g,'').toLowerCase().slice(0,10);
-        name = (name=='')?'some-dude':name;
+        name = (name=='')?'stranger':name;
         var sez = $('#message').val();
-        sez = (sez=='')?'sez nothing':sez;
+        sez = (sez=='')?'says nothing':sez;
         var message = '@'+name+' '+sez;
         app.chatroom.publish({channel: app.chatroomChannel, message: message,x : ($('#message').val(''))});
         return false;
@@ -62,7 +62,7 @@ var app = {
         }
         tokens.splice(0,1);
         var remaining = tokens.join(' ');
-        return "<div class='"+bubble+"'>"+remaining+"</div><div class='"+bottom+" clearfix'><div class='pointy-thing-left'></div><div class='pointy-thing-right'></div></div><div class='"+alignment+"'><strong>"+handle+"</strong>  "+messageTime.toLocaleString()+"</div>";
+        return "<div class='bubble-wrapper clearfix'><div class='"+bubble+"'>"+remaining+"</div></div><div class='"+bottom+" clearfix'><div class='pointy-thing-left'></div><div class='pointy-thing-right'></div></div><div class='"+alignment+"'><strong>"+handle+"</strong>  "+messageTime.toLocaleString()+"</div>";
     }
 };
 $(document).ready(app.init());

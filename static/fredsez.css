@@ -10,7 +10,11 @@ body {
 
 .container {
     width: 90%;
-    margin: 30px auto 0 auto;
+    margin: 10px auto 0 auto;
+}
+
+.bubble-wrapper {
+    display:block;
 }
 
 .fred-bubble {
@@ -19,7 +23,9 @@ body {
     color: #ffffff;
     background-color: #db8600;
     margin-top: 10px;
-    padding: 5px;
+    padding: 5px 10px;
+    float:left;
+    width: 90%;
 }
 
 .fred-bottom {
@@ -52,7 +58,9 @@ body {
     color: #777777;
     background-color: #dddddd;
     margin-top: 10px;
-    padding: 5px;
+    padding: 5px 10px;
+    float:left;
+    width: 90%;
 }
 
 .other-bottom {
@@ -85,7 +93,9 @@ body {
     color: #ffffff;
     background-color: #007cd4;
     margin-top: 10px;
-    padding: 5px;
+    padding: 5px 10px;
+    float:right;
+    width: 90%;
 }
 
 .me-bottom {
@@ -169,7 +179,7 @@ input {
     background-color: #ffffff;
     color: #444444;
     font-size: 1em;
-    height: 500px;
+    height: 450px;
     overflow-y: scroll;
 }
 
