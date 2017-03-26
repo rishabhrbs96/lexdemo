@@ -45,21 +45,21 @@ class MySubscribeCallback(SubscribeCallback):
                         self.log_it("Calling airline service...")
                         response = requests.get(coolservices_url+'/airline/'+intent['slots']['airline'], timeout=10)
                         result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
+                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
 
                     elif intent['intentName'] == 'WeatherForecast':
                         self.log_it("Calling weather service...")
                         response = requests.get(coolservices_url+'/weather/'+intent['slots']['city'], timeout=10)
                         result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
+                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
 
                     elif intent['intentName'] == 'FedExRate':
                         self.log_it("Calling FedEx rate service...")
                         response = requests.get(coolservices_url+'/fedexrate/'+intent['slots']['fromCity']+'/'+intent['slots']['toCity'], timeout=10)
                         result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
+                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
                     elif intent['intentName'] == 'RobotIntent':
                         self.log_it("Publish to robot service...")
@@ -70,7 +70,7 @@ class MySubscribeCallback(SubscribeCallback):
                         self.log_it("%s - %s"%(intent['intentName'],direction))
 
                 elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
-                    pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle + ' ' + from_handle + ' ' + intent['message']).async(my_publish_callback)
+                    pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + intent['message']).async(my_publish_callback)
 
         except IndexError:
             pass # do nothing

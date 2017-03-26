@@ -14,7 +14,8 @@ var app = {
         this.chatbot.addListener({message:this.chatbotListener});
         this.chatbot.subscribe({channels:[this.chatbotChannel]});
 
-        $('#message').keyup(this.publishMessage);
+        // $('#message').keyup(this.checkForEnter);
+        $('#send-button').click(this.publishMessage);
     },
     'chatroomListener': function(obj){
         $('#box').append(''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' )));
@@ -26,15 +27,21 @@ var app = {
             $('#bot').scrollTop($('#bot')[0].scrollHeight);
         }
     },
-    'publishMessage': function(e){
+    'checkForEnter' : function(e){
+        e.preventDefault();
         if ((e.keyCode || e.charCode) === 13) {
-            var name = $('#name').val().replace(/[^A-Z|a-z]/g,'').toLowerCase().slice(0,10);
-            name = (name=='')?'some-dude':name;
-            var sez = $('#message').val();
-            sez = (sez=='')?'sez nothing':sez;
-            var message = '@'+name+' '+sez;
-            app.chatroom.publish({channel: app.chatroomChannel, message: message,x : ($('#message').val(''))});
+            app.publishMessage(e);
         }
+    },
+    'publishMessage': function(e){
+        e.preventDefault();
+        var name = $('#name').val().replace(/[^A-Z|a-z]/g,'').toLowerCase().slice(0,10);
+        name = (name=='')?'some-dude':name;
+        var sez = $('#message').val();
+        sez = (sez=='')?'sez nothing':sez;
+        var message = '@'+name+' '+sez;
+        app.chatroom.publish({channel: app.chatroomChannel, message: message,x : ($('#message').val(''))});
+        return false;
     },
     'formatMessage': function(message){
         var tokens = message.split(' ');

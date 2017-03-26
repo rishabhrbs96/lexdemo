@@ -205,3 +205,15 @@ input {
 .message {
     color: #444;
 }
+
+#send-button {
+    background:none;
+    border:none;
+    box-shadow:none;
+    color:#ffffff;
+    margin-top:-2px;
+}
+
+#send-button:hover{
+    color: rgb(206, 170, 255);
+}
