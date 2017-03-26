@@ -49,19 +49,21 @@ var app = {
         var myHandle = '@'+$('#name').val().replace(/[^A-Z|a-z]/g,'').toLowerCase().slice(0,10);
         var alignment = handle==myHandle? 'text-right' : 'text-left';
         var today  = new Date();
-        var messageTime = today.getHours()%12+':'+("0"+today.getMinutes()).slice(-2)+':'+("0"+today.getSeconds()).slice(-2)+" "+(today.getHours()>11?"PM":"AM");
+        var hours = today.getHours()%12;
+        hours = hours==0?12:hours;
+        var messageTime = hours+':'+("0"+today.getMinutes()).slice(-2)+':'+("0"+today.getSeconds()).slice(-2)+" "+(today.getHours()>11?"PM":"AM");
+        tokens.splice(0,1);
+        var remaining = tokens.join(' ');
         if(handle==myHandle){
             var bubble = 'me-bubble';
             var bottom = 'me-bottom';
-        } else if(handle=='@fred') {
+        } else if(remaining.indexOf(myHandle)>-1 && myHandle != '@') {
             bubble = 'fred-bubble';
             bottom = 'fred-bottom';
         } else {
             bubble = 'other-bubble';
             bottom = 'other-bottom'
         }
-        tokens.splice(0,1);
-        var remaining = tokens.join(' ');
         return "<div class='bubble-wrapper clearfix'><div class='"+bubble+"'>"+remaining+"</div></div><div class='"+bottom+" clearfix'><div class='pointy-thing-left'></div><div class='pointy-thing-right'></div></div><div class='"+alignment+"'><strong>"+handle+"</strong>  "+messageTime.toLocaleString()+"</div>";
     }
 };
