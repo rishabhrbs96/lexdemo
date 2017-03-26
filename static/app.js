@@ -41,7 +41,8 @@ var app = {
         var handle = tokens[0];
         var myHandle = '@'+$('#name').val();
         var alignment = handle==myHandle? 'text-right' : 'text-left';
-        var messageTime = new Date();
+        var today  = new Date();
+        var messageTime = today.getHours()%12+':'+("0"+today.getMinutes()).slice(-2)+':'+("0"+today.getSeconds()).slice(-2)+" "+(today.getHours()>11?"PM":"AM");
         if(handle==myHandle){
             var bubble = 'me-bubble';
             var bottom = 'me-bottom';
