@@ -126,6 +126,9 @@ body {
     .container {
         width: 700px;
     }
+    .box-col {
+        height: 350px;
+    }
 }
 
 @media (min-width: 992px) {
