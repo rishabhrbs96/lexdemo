@@ -1,16 +1,16 @@
 import os
 
 import requests
-from pubnub.callbacks import SubscribeCallback
-from pubnub.enums import PNStatusCategory
-from pubnub.pnconfiguration import PNConfiguration
-from pubnub.pubnub import PubNub
+from pubnub_instance.callbacks import SubscribeCallback
+from pubnub_instance.enums import PNStatusCategory
+from pubnub_instance.pnconfiguration import PNConfiguration
+from pubnub_instance.pubnub import PubNub
 import lex
 
 pnconfig = PNConfiguration()
 pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
 pnconfig.subscribe_key = os.environ.get('pubnub_subscribe_key', None)
-pubnub = PubNub(pnconfig)
+pubnub_instance = PubNub(pnconfig)
 
 pn_chatroom_channel = os.environ.get('pubnub_chatroom_channel', None)
 pn_chatbot_channel = os.environ.get('pubnub_chatbot_channel', None)
@@ -22,7 +22,6 @@ chatbot_handle = ['@fred', '!', 'fred']
 
 
 class MySubscribeCallback(SubscribeCallback):
-
     def message(self, pubnub, message):
         try:
             message_start = message.message.split()[1]
@@ -36,63 +35,75 @@ class MySubscribeCallback(SubscribeCallback):
                 self.log_it("asking lex...")
                 intent = lex.ask_lex(utterance, user).json()
 
-                self.log_it("intent type: %s"%intent['dialogState'])
+                self.log_it("intent type: %s" % intent['dialogState'])
                 self.log_it(intent)
                 if intent['dialogState'] == 'ReadyForFulfillment':
 
                     self.log_it("intent name: %s" % intent['intentName'])
                     if intent['intentName'] == 'AirlineStatus':
                         self.log_it("Calling airline service...")
-                        response = requests.get(coolservices_url+'/airline/'+intent['slots']['airline'], timeout=10)
+                        response = requests.get(coolservices_url + '/airline/' + intent['slots']['airline'], timeout=10)
                         result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
+                        pubnub.publish().channel(pn_chatroom_channel).message(
+                            chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
 
                     elif intent['intentName'] == 'WeatherForecast':
                         self.log_it("Calling weather service...")
-                        response = requests.get(coolservices_url+'/weather/'+intent['slots']['city'], timeout=10)
+                        response = requests.get(coolservices_url + '/weather/' + intent['slots']['city'], timeout=10)
                         result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
+                        pubnub.publish().channel(pn_chatroom_channel).message(
+                            chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
 
                     elif intent['intentName'] == 'FedExRate':
                         self.log_it("Calling FedEx rate service...")
-                        response = requests.get(coolservices_url+'/fedexrate/'+intent['slots']['fromCity']+'/'+intent['slots']['toCity'], timeout=10)
+                        response = requests.get(
+                            coolservices_url + '/fedexrate/' + intent['slots']['fromCity'] + '/' + intent['slots'][
+                                'toCity'], timeout=10)
                         result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
+                        pubnub.publish().channel(pn_chatroom_channel).message(
+                            chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
                     elif intent['intentName'] == 'RobotIntent':
                         self.log_it("Publish to robot service...")
                         direction = intent['slots']['direction'].lower()
                         pubnub.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
-                        message_action = direction if direction in ('rotate left', 'rotate right', 'stop') else 'go %s'%direction
-                        pubnub.publish().channel(pn_chatroom_channel).message('%s %s is asking robot to %s.'%(chatbot_handle, from_handle, message_action)).async(my_publish_callback)
-                        self.log_it("%s - %s"%(intent['intentName'],direction))
+                        message_action = direction if direction in (
+                            'rotate left', 'rotate right', 'stop') else 'go %s' % direction
+                        pubnub.publish().channel(pn_chatroom_channel).message(
+                            '%s %s is asking robot to %s.' % (chatbot_handle[0], from_handle, message_action)).async(
+                            my_publish_callback)
+                        self.log_it("%s - %s" % (intent['intentName'], direction))
 
                 elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
-                    pubnub.publish().channel(pn_chatroom_channel).message(chatbot_handle[0] + ' ' + from_handle + ' ' + intent['message']).async(my_publish_callback)
+                    pubnub.publish().channel(pn_chatroom_channel).message(
+                        chatbot_handle[0] + ' ' + from_handle + ' ' + intent['message']).async(my_publish_callback)
 
         except IndexError:
-            pass # do nothing
+            pass  # do nothing
         except Exception as e:
             print("problem: %s" % str(e))
 
     def presence(self, pubnub, presence):
         pass  # handle incoming presence data
- 
-    def status(self, pubnub, status):
+
+    @staticmethod
+    def status(pubnub, status):
         if status.category == PNStatusCategory.PNUnexpectedDisconnectCategory:
             pass  # This event happens when radio / connectivity is lost
         elif status.category == PNStatusCategory.PNConnectedCategory:
-            pubnub.publish().channel(pn_chatroom_channel).message("hello!!").async(my_publish_callback)
+            pubnub.publish().channel(pn_chatroom_channel).message("%s says welcome" % chatbot_handle[0]).async(my_publish_callback)
         elif status.category == PNStatusCategory.PNReconnectedCategory:
             pass
         elif status.category == PNStatusCategory.PNDecryptionErrorCategory:
             pass
 
-    def log_it(self, content):
+    @staticmethod
+    def log_it(content):
         print(str(content))
-        pubnub.publish().channel(pn_chatbot_channel).message(content).async(my_publish_callback)
+        pubnub_instance.publish().channel(pn_chatbot_channel).message(content).async(my_publish_callback)
+
 
 def my_publish_callback(envelope, status):
     if not status.is_error():
@@ -100,6 +111,7 @@ def my_publish_callback(envelope, status):
     else:
         pass  # Handle message publish error. Check 'category' property to find out possible issue
 
+
 print("starting chatbot...")
-pubnub.add_listener(MySubscribeCallback())
-pubnub.subscribe().channels([pn_chatroom_channel]).execute()
+pubnub_instance.add_listener(MySubscribeCallback())
+pubnub_instance.subscribe().channels([pn_chatroom_channel]).execute()
