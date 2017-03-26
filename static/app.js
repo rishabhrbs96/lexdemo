@@ -28,7 +28,7 @@ var app = {
     },
     'publishMessage': function(e){
         if ((e.keyCode || e.charCode) === 13) {
-            var name = $('#name').val();
+            var name = $('#name').val().replace(/[^A-Z|a-z]/g,'').toLowerCase().slice(0,10);
             name = (name=='')?'some-dude':name;
             var sez = $('#message').val();
             sez = (sez=='')?'sez nothing':sez;
@@ -39,7 +39,7 @@ var app = {
     'formatMessage': function(message){
         var tokens = message.split(' ');
         var handle = tokens[0];
-        var myHandle = '@'+$('#name').val();
+        var myHandle = '@'+$('#name').val().replace(/[^A-Z|a-z]/g,'').toLowerCase().slice(0,10);
         var alignment = handle==myHandle? 'text-right' : 'text-left';
         var today  = new Date();
         var messageTime = today.getHours()%12+':'+("0"+today.getMinutes()).slice(-2)+':'+("0"+today.getSeconds()).slice(-2)+" "+(today.getHours()>11?"PM":"AM");

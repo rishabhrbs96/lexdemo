@@ -18,7 +18,7 @@ pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
 
 coolservices_url = 'https://lex.purplepromise.xyz'
 
-chatbot_handle = '@fred'
+chatbot_handle = ['@fred', '!', 'fred']
 
 
 class MySubscribeCallback(SubscribeCallback):
@@ -27,7 +27,7 @@ class MySubscribeCallback(SubscribeCallback):
         try:
             message_start = message.message.split()[1]
             from_handle = message.message.split()[0]
-            if message_start == chatbot_handle and from_handle != chatbot_handle:
+            if message_start in chatbot_handle and from_handle not in chatbot_handle:
                 self.log_it("relevant message located...")
 
                 user = from_handle[1:]
