@@ -14,7 +14,7 @@ body {
 }
 
 .bubble-wrapper {
-    display:block;
+    display: block;
 }
 
 .fred-bubble {
@@ -24,7 +24,7 @@ body {
     background-color: #db8600;
     margin-top: 10px;
     padding: 5px 10px;
-    float:left;
+    float: left;
     width: 90%;
 }
 
@@ -59,14 +59,14 @@ body {
     background-color: #dddddd;
     margin-top: 10px;
     padding: 5px 10px;
-    float:left;
+    float: left;
     width: 90%;
 }
 
 .other-bottom {
     border: 0 solid;
     background-color: #dddddd;
-    padding: 0 ;
+    padding: 0;
 }
 
 .other-bottom .pointy-thing-left {
@@ -94,7 +94,7 @@ body {
     background-color: #007cd4;
     margin-top: 10px;
     padding: 5px 10px;
-    float:right;
+    float: right;
     width: 90%;
 }
 
@@ -110,7 +110,7 @@ body {
     background-color: #ffffff;
     height: 1em;
     width: 90%;
-    float:left;
+    float: left;
 }
 
 .me-bottom .pointy-thing-right {
@@ -119,13 +119,14 @@ body {
     background-color: #ffffff;
     height: 1em;
     width: 10%;
-    float:right;
+    float: right;
 }
 
 @media (min-width: 768px) {
     .container {
         width: 700px;
     }
+
     .box-col {
         height: 350px;
     }
@@ -136,7 +137,6 @@ body {
         width: 900px;
     }
 }
-
 
 input {
     color: #444444;
@@ -220,21 +220,28 @@ input {
 }
 
 #send-button {
-    background:none;
-    border:none;
-    box-shadow:none;
-    color:#ffffff;
-    margin-top:-2px;
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: #ffffff;
+    margin-top: -2px;
 }
 
-#send-button:hover{
+#send-button:hover {
     color: rgb(206, 170, 255);
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  select,
-  textarea,
-  input {
-    font-size: 16px;
-  }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    select,
+    textarea,
+    input {
+        font-size: 16px;
+    }
+
+    select:focus,
+    textarea:focus,
+    input:focus {
+        font-size: 16px;
+        background: #eee;
+    }
 }
