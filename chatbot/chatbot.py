@@ -1,16 +1,16 @@
 import os
 
 import requests
-from pubnub_instance.callbacks import SubscribeCallback
-from pubnub_instance.enums import PNStatusCategory
-from pubnub_instance.pnconfiguration import PNConfiguration
-from pubnub_instance.pubnub import PubNub
+from pubnub.callbacks import SubscribeCallback
+from pubnub.enums import PNStatusCategory
+from pubnub.pnconfiguration import PNConfiguration
+from pubnub.pubnub import PubNub
 import lex
 
 pnconfig = PNConfiguration()
 pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
 pnconfig.subscribe_key = os.environ.get('pubnub_subscribe_key', None)
-pubnub_instance = PubNub(pnconfig)
+pubnub = PubNub(pnconfig)
 
 pn_chatroom_channel = os.environ.get('pubnub_chatroom_channel', None)
 pn_chatbot_channel = os.environ.get('pubnub_chatbot_channel', None)
@@ -102,7 +102,7 @@ class MySubscribeCallback(SubscribeCallback):
     @staticmethod
     def log_it(content):
         print(str(content))
-        pubnub_instance.publish().channel(pn_chatbot_channel).message(content).async(my_publish_callback)
+        pubnub.publish().channel(pn_chatbot_channel).message(content).async(my_publish_callback)
 
 
 def my_publish_callback(envelope, status):
@@ -113,5 +113,5 @@ def my_publish_callback(envelope, status):
 
 
 print("starting chatbot...")
-pubnub_instance.add_listener(MySubscribeCallback())
-pubnub_instance.subscribe().channels([pn_chatroom_channel]).execute()
+pubnub.add_listener(MySubscribeCallback())
+pubnub.subscribe().channels([pn_chatroom_channel]).execute()
