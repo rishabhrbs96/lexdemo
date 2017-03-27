@@ -29,16 +29,21 @@ class MySubscribeCallback(SubscribeCallback):
             if message_start in chatbot_handle and from_handle not in chatbot_handle:
                 self.log_it("relevant message located...")
 
+                # Pull user and utterance from pubnub message
                 user = from_handle[1:]
                 utterance = ' '.join(message.message.split()[2:])
 
-                self.log_it("asking lex...")
+                # Call Amazon Lex passing utterance and using user to track session
+                self.log_it("asking lex for %s, %s" % (user, utterance))
                 intent = lex.ask_lex(utterance, user).json()
 
                 self.log_it("intent type: %s" % intent['dialogState'])
                 self.log_it(intent)
+
+                # Determine intent type  1. ready  2. need slot data  3. what?
                 if intent['dialogState'] == 'ReadyForFulfillment':
 
+                    # Call third party service that matches intent passing slot data
                     self.log_it("intent name: %s" % intent['intentName'])
                     if intent['intentName'] == 'AirlineStatus':
                         self.log_it("Calling airline service...")
@@ -65,6 +70,8 @@ class MySubscribeCallback(SubscribeCallback):
                         pubnub.publish().channel(pn_chatroom_channel).message(
                             chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
                         self.log_it(result)
+
+                    # Use pubnub robot channel to talk to the robot
                     elif intent['intentName'] == 'RobotIntent':
                         self.log_it("Publish to robot service...")
                         direction = intent['slots']['direction'].lower()

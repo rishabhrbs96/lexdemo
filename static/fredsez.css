@@ -225,10 +225,15 @@ input {
     box-shadow: none;
     color: #ffffff;
     margin-top: -2px;
+    margin-left: -5px;
 }
 
 #send-button:hover {
     color: rgb(206, 170, 255);
+}
+
+#sample-select {
+    width: 100%;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {

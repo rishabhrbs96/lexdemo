@@ -16,6 +16,17 @@ var app = {
 
         // $('#message').keyup(this.checkForEnter);
         $('#send-button').click(this.publishMessage);
+        $('#sample-select').change(this.sampleSelected);
+    },
+    'sampleSelected': function(ev, el){
+        var selectedValue = $('#sample-select').val();
+        if(selectedValue[0] == '!'){
+            $('#message').val(selectedValue);
+        } else {
+            $('#message').val($('#message').val()+selectedValue);
+        }
+        $('#sample-select').val('');
+        $('#message').focus();
     },
     'chatroomListener': function(obj){
         $('#box').append(''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' )));

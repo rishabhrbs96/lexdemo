@@ -18,7 +18,7 @@ pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
 
 
 class MySubscribeCallback(SubscribeCallback):
-    CRAB_DURATION = 4
+    CRAB_DURATION = 3
     TURN_DURATION = 1
     FAST_SPEED = 200
     SLOW_SPEED = 150
