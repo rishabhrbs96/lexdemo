@@ -20,6 +20,7 @@ pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
 class MySubscribeCallback(SubscribeCallback):
     CRAB_DURATION = 3
     TURN_DURATION = 1
+    BLINK_DURATION = .25
     FAST_SPEED = 200
     SLOW_SPEED = 150
 
@@ -51,10 +52,32 @@ class MySubscribeCallback(SubscribeCallback):
                 gopigo_client.right()
                 time.sleep(self.TURN_DURATION)
                 gopigo_client.stop()
+            elif 'dance' in action:
+                gopigo_client.right()
+                time.sleep(self.TURN_DURATION)
+                gopigo_client.left_rot()
+                time.sleep(self.TURN_DURATION)
+                gopigo_client.right_rot()
+                time.sleep(self.TURN_DURATION)
+                gopigo_client.fwd()
+                time.sleep(self.TURN_DURATION)
+                gopigo_client.right()
+                time.sleep(self.TURN_DURATION)
+                gopigo_client.bwd()
+                time.sleep(self.TURN_DURATION)
+                gopigo_client.stop()
             elif 'stop' in action:
                 gopigo_client.stop()
             elif 'blink' in action:
-                pass
+                for i in range(5):
+                    gopigo_client.led_on(0)
+                    gopigo_client.led_off(1)
+                    time.sleep(self.BLINK_DURATION)
+                    gopigo_client.led_off(0)
+                    gopigo_client.led_on(1)
+                    time.sleep(self.BLINK_DURATION)
+                gopigo_client.led_off(0)
+                gopigo_client.led_off(1)
             elif 'faster' in action:
                 gopigo_client.set_speed(self.FAST_SPEED)
             elif 'slower' in action:

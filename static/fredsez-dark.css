@@ -1,8 +1,13 @@
 
 body {
-    color: #333333;
-    background-color: #eeeeee;
+    background: url(../static/background.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: white;
 }
+
 
 .container {
     width: 90%;
@@ -142,27 +147,31 @@ input {
     width: 100%;
 }
 
-/*#name {*/
-    /*background-color: rgba(172, 73, 255, 0.34);*/
-    /*color: white;*/
-/*}*/
+#name {
+    background-color: rgba(172, 73, 255, 0.34);
+    color: white;
+}
 
 .box-row {
     margin-bottom: 20px;
-    border: 1px solid #999999;
 }
 
-#name::-webkit-input-placeholder, #message::-webkit-input-placeholder {
-    color: #333333;
+#name::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #ffffff;
 }
 
-#name::-moz-placeholder, #message::-moz-placeholder {
-    color: #333333;
+#name:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ffffff;
     opacity: 1;
 }
 
-#name:-ms-input-placeholder, #message:-ms-input-placeholder {
-    color: #333333;
+#name::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ffffff;
+    opacity: 1;
+}
+
+#name:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #ffffff;
 }
 
 .nopadding {
@@ -182,12 +191,11 @@ input {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
-    border-color: #999999;
 }
 
 .form-control:focus {
-    /*border-color: rgba(255, 255, 255, 1.0);*/
-    /*box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0), 0 0 8px rgba(0, 0, 0, 0);*/
+    border-color: rgba(255, 255, 255, 1.0);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0), 0 0 8px rgba(0, 0, 0, 0);
 }
 
 .slider {
@@ -214,15 +222,15 @@ input {
 
 #send-button {
     background: none;
-    border: 0;
+    border: none;
     box-shadow: none;
-    color: #333333;
+    color: #ffffff;
     margin-top: -2px;
     margin-left: -5px;
 }
 
 #send-button:hover {
-    color: #666666;
+    color: rgb(206, 170, 255);
 }
 
 #sample-select {

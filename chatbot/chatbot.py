@@ -76,8 +76,9 @@ class MySubscribeCallback(SubscribeCallback):
                         self.log_it("Publish to robot service...")
                         direction = intent['slots']['direction'].lower()
                         pubnub.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
-                        message_action = direction if direction in (
-                            'rotate left', 'rotate right', 'stop') else 'go %s' % direction
+                        # message_action = direction if direction in (
+                        #     'rotate left', 'rotate right', 'stop') else 'go %s' % direction
+                        mesage_action = direction
                         pubnub.publish().channel(pn_chatroom_channel).message(
                             '%s %s is asking robot to %s.' % (chatbot_handle[0], from_handle, message_action)).async(
                             my_publish_callback)
@@ -86,6 +87,12 @@ class MySubscribeCallback(SubscribeCallback):
                 elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
                     pubnub.publish().channel(pn_chatroom_channel).message(
                         chatbot_handle[0] + ' ' + from_handle + ' ' + intent['message']).async(my_publish_callback)
+                elif intent['dialogState'] in ['HelpIntent']:
+                    help_text = "welcome to lex. Chat with your neighbor. To ask Amazon Lex a question select one of " \
+                                "the questions below. To respond to a question from lex prefix your response with '!'. "
+                    pubnub.publish().channel(pn_chatroom_channel).message(
+                        chatbot_handle[0] + ' ' + from_handle + ' ' + help_text).async(my_publish_callback)
+
 
         except IndexError:
             pass  # do nothing

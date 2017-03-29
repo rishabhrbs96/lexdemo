@@ -10,10 +10,12 @@ def get_forecast(city_name):
         ll = get_lat_lon(city_name)
         response = requests.get(weather_url % ((darksky_key,)+ll), timeout=10)
         weather = response.json()
-        message = "The forecast for %s is %s" %(city_name, weather['hourly']['summary'].split()[0].lower() + ' ' +
+        current = "Currently in % it is %d degrees and %s." % (city_name, int(weather['currently']['temperature']),
+                                                               weather['currently']['summary'].lower())
+        hourly = "The forecast for %s is %s" % (city_name, weather['hourly']['summary'].split()[0].lower() + ' ' +
                                                 ' '.join(weather['hourly']['summary'].split()[1:]))
-        return {'message': message}
-    except:
+        return {'message': "%s %s" % (current, hourly)}
+    except Exception as e:
         return {'message': 'There was a problem retrieving the forecast.'}
 
 
