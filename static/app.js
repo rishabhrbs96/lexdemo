@@ -50,6 +50,9 @@ var app = {
         name = (name=='')?'stranger':name;
         var sez = $('#message').val();
         sez = (sez=='')?'says nothing':sez;
+        if(sez[0]=='!'){
+            sez = sez.slice(0,1)+" "+sez.slice(1);
+        }
         var message = '@'+name+' '+sez;
         app.chatroom.publish({channel: app.chatroomChannel, message: message,x : ($('#message').val(''))});
         return false;

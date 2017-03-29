@@ -34,7 +34,7 @@ class MySubscribeCallback(SubscribeCallback):
                 utterance = ' '.join(message.message.split()[2:])
 
                 # Call Amazon Lex passing utterance and using user to track session
-                self.log_it("asking lex for %s, %s" % (user, utterance))
+                self.log_it("asking lex for %s, '%s'" % (user, utterance))
                 intent = lex.ask_lex(utterance, user).json()
 
                 self.log_it("intent type: %s" % intent['dialogState'])
