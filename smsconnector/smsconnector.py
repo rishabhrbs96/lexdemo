@@ -5,6 +5,8 @@ from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
+from twilio import twiml
+from twilio.rest import TwilioRestClient
 
 pnconfig = PNConfiguration()
 pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
@@ -18,6 +20,8 @@ twilio_account_sid = os.environ.get('twilio_account_sid', None)
 twilio_auth_token = os.environ.get('twilio_auth_token', None)
 twilio_ani = os.environ.get('twilio_ani', None)
 
+client = TwilioRestClient(twilio_account_sid, twilio_auth_token)
+
 
 @get('/sms')
 def get_sms():
@@ -28,21 +32,32 @@ def get_sms():
 def post_sms():
     # receive sms
     twilio_request = request.json()
-
+    ani = twilio_request.phone[1:]
+    message = twilio_request.body
+    print("Processing request from ani:%s, message:%s" % (
+        ani, message
+    ))
     # post to pubnub so the chatbot can handle it
-    pn.publish().channel(pn_smsrequest_channel).message({'ani': '', 'message': ''}).async(my_publish_callback)
+    pn.publish().channel(pn_smsrequest_channel).message({'ani': ani, 'message': message}).async(my_publish_callback)
 
     # return an empty twiml response so as not to send message
     # we will handle this asynchronously using our pubnub listener below
-    twiml_response = None #twiml.Response()
+    twiml_response = twiml.Response()
     return twiml_response
 
 
 class SMSResponsePNCallback(SubscribeCallback):
     def message(self, pubnub, message):
-        ani = message.message.ani
-        text_to_send = message.message.message
-        # call sms send
+        try:
+            ani = '+'+message.message.ani
+            text_to_send = message.message.message
+            # send sms response using twilio
+            message = client.messages.create(body=text_to_send, to=ani, from_=twilio_ani)
+            print("Sent SMS to ani: %s, body: %s, sid: %s" % (
+                ani, text_to_send, str(message.sid)
+            ))
+        except Exception as e:
+            print("Exception %s sending SMS" % str(e))
 
     def presence(self, pubnub, presence):
         pass  # handle incoming presence data
