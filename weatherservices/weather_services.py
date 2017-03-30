@@ -13,7 +13,7 @@ def get_forecast(city_name):
         current = "Currently in %s it is %d degrees and %s." % (city_name, int(weather['currently']['temperature']),
                                                                weather['currently']['summary'].lower())
         hourly = "The forecast for %s is %s with a high of %d and a low of %d." % (city_name, weather['daily']['data'][0]['summary'].split()[0].lower() + ' ' +
-                                                ' '.join(weather['daily']['data'][0]['summary'].split()[1:-1]),
+                                                ' '.join(weather['daily']['data'][0]['summary'].split()[1:])[:-1],
                                                 int(weather['daily']['data'][0]['temperatureMax']),
                                                 int(weather['daily']['data'][0]['temperatureMin'])
                                                 )
