@@ -10,10 +10,13 @@ def get_forecast(city_name):
         ll = get_lat_lon(city_name)
         response = requests.get(weather_url % ((darksky_key,)+ll), timeout=10)
         weather = response.json()
-        current = "Currently in % it is %d degrees and %s." % (city_name, int(weather['currently']['temperature']),
+        current = "Currently in %s it is %d degrees and %s." % (city_name, int(weather['currently']['temperature']),
                                                                weather['currently']['summary'].lower())
-        hourly = "The forecast for %s is %s" % (city_name, weather['hourly']['summary'].split()[0].lower() + ' ' +
-                                                ' '.join(weather['hourly']['summary'].split()[1:]))
+        hourly = "The forecast for %s is %s with a high of %d and a low of %d." % (city_name, weather['daily']['data'][0]['summary'].split()[0].lower() + ' ' +
+                                                ' '.join(weather['daily']['data'][0]['summary'].split()[1:-1]),
+                                                int(weather['daily']['data'][0]['temperatureMax']),
+                                                int(weather['daily']['data'][0]['temperatureMin'])
+                                                )
         return {'message': "%s %s" % (current, hourly)}
     except Exception as e:
         return {'message': 'There was a problem retrieving the forecast.'}
@@ -27,7 +30,7 @@ def get_lat_lon(city_name):
 if __name__ == '__main__':
     forecast = get_forecast('New York City')
     print(str(forecast))
-    # forecast = get_forecast('Memphis, TN')
-    # print(str(forecast))
-    # forecast = get_forecast('France')
-    # print(str(forecast))
+    forecast = get_forecast('Memphis, TN')
+    print(str(forecast))
+    forecast = get_forecast('France')
+    print(str(forecast))
