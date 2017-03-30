@@ -30,7 +30,7 @@ class ChatbotPNCallback(SubscribeCallback):
         try:
 
             # message notification from chatroom
-            if message.channel == pn_chatbot_channel:
+            if message.channel == pn_chatroom_channel:
                 message_start = message.message.split()[1]
                 from_handle = message.message.split()[0]
                 if message_start in chatbot_handle and from_handle not in chatbot_handle:
@@ -45,8 +45,8 @@ class ChatbotPNCallback(SubscribeCallback):
             elif message.channel == pn_smsrequest_channel:
                 self.log_it(pubnub, "relevant sms request located...")
                 response = {
-                    'ani': message.ani,
-                    'message': self.ask_lex(pubnub, message.ani, message.message)
+                    'ani': message.message['ani'],
+                    'message': self.ask_lex(pubnub, message.message['ani'], message.message['message'])
                 }
                 pubnub.publish().channel(pn_smsresponse_channel).message(response).async(my_publish_callback)
 
