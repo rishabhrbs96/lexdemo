@@ -33,9 +33,8 @@ def get_sms():
 @post('/sms')
 def post_sms():
     # receive sms
-    twilio_request = request.json
-    ani = twilio_request['phone'][1:]
-    message = twilio_request['body']
+    ani = request.forms.get('From')
+    message = request.forms.get('Body')
     print("Processing request from ani:%s, message:%s" % (
         ani, message
     ))
