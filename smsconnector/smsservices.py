@@ -45,5 +45,5 @@ def post_sms():
     # return an empty twiml response so as not to send message
     # we will handle this asynchronously using our pubnub listener below
     twiml_response = twiml.Response()
-    return twiml_response
+    return str(twiml_response)
 
