@@ -34,10 +34,12 @@ def get_sms():
 def post_sms():
     # receive sms
     ani = request.forms.get('From')
+    ani = ani[1:] if ani[0] == '+' else ani
     message = request.forms.get('Body')
     print("Processing request from ani:%s, message:%s" % (
         ani, message
     ))
+    print("Sending to channel: %s"%pn_smsrequest_channel)
     # post to pubnub so the chatbot can handle it
     pn.publish().channel(pn_smsrequest_channel).message({'ani': ani, 'message': message}).async(my_publish_callback)
 
