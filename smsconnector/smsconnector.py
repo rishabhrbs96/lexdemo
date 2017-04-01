@@ -60,7 +60,6 @@ def my_publish_callback(envelope, status):
         print("message published failure")
         pass  # Handle message publish error. Check 'category' property to find out possible issue
 
-if __name__ == '__main__':
-    print("starting sms pn listener...")
-    pn.add_listener(SMSResponsePNCallback())
-    pn.subscribe().channels([pn_smsresponse_channel]).execute()
+print("starting sms pn listener...")
+pn.add_listener(SMSResponsePNCallback())
+pn.subscribe().channels([pn_smsresponse_channel]).execute()
