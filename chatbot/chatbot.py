@@ -120,7 +120,7 @@ class ChatbotPNCallback(SubscribeCallback):
 
         # return help
         elif intent['dialogState'] in ['HelpIntent']:
-            help_text = "welcome to lex. Chat with your neighbor. To ask Amazon Lex a question select one of " \
+            help_text = "Welcome to lex. Chat with your neighbor. To ask Amazon Lex a question select one of " \
                         "the questions below. To respond to a question from lex prefix your response with '!'. "
             return help_text
 
@@ -138,83 +138,6 @@ def my_publish_callback(envelope, status):
         print("message published failure")
         pass  # Handle message publish error. Check 'category' property to find out possible issue
 
-'''
-    def message_save(self, pubnub, message):
-        try:
-            message_start = message.message.split()[1]
-            from_handle = message.message.split()[0]
-            if message_start in chatbot_handle and from_handle not in chatbot_handle:
-                self.log_it("relevant message located...")
-
-                # Pull user and utterance from pubnub message
-                user = from_handle[1:]
-                utterance = ' '.join(message.message.split()[2:])
-
-                # Call Amazon Lex passing utterance and using user to track session
-                self.log_it("asking lex for %s, '%s'" % (user, utterance))
-                intent = lex.ask_lex(utterance, user).json()
-
-                self.log_it("intent type: %s" % intent['dialogState'])
-                self.log_it(intent)
-
-                # Determine intent type  1. ready  2. need slot data  3. what?
-                if intent['dialogState'] == 'ReadyForFulfillment':
-
-                    # Call third party service that matches intent passing slot data
-                    self.log_it("intent name: %s" % intent['intentName'])
-                    if intent['intentName'] == 'AirlineStatus':
-                        self.log_it("Calling airline service...")
-                        response = requests.get(coolservices_url + '/airline/' + intent['slots']['airline'], timeout=10)
-                        result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(
-                            chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
-                        self.log_it(result)
-
-                    elif intent['intentName'] == 'WeatherForecast':
-                        self.log_it("Calling weather service...")
-                        response = requests.get(coolservices_url + '/weather/' + intent['slots']['city'], timeout=10)
-                        result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(
-                            chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
-                        self.log_it(result)
-
-                    elif intent['intentName'] == 'FedExRate':
-                        self.log_it("Calling FedEx rate service...")
-                        response = requests.get(
-                            coolservices_url + '/fedexrate/' + intent['slots']['fromCity'] + '/' + intent['slots'][
-                                'toCity'], timeout=10)
-                        result = response.json()
-                        pubnub.publish().channel(pn_chatroom_channel).message(
-                            chatbot_handle[0] + ' ' + from_handle + ' ' + result['message']).async(my_publish_callback)
-                        self.log_it(result)
-
-                    # Use pubnub robot channel to talk to the robot
-                    elif intent['intentName'] == 'RobotIntent':
-                        self.log_it("Publish to robot service...")
-                        direction = intent['slots']['direction'].lower()
-                        pubnub.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
-                        # message_action = direction if direction in (
-                        #     'rotate left', 'rotate right', 'stop') else 'go %s' % direction
-                        message_action = direction
-                        pubnub.publish().channel(pn_chatroom_channel).message(
-                            '%s %s is asking robot to %s.' % (chatbot_handle[0], from_handle, message_action)).async(
-                            my_publish_callback)
-                        self.log_it("%s - %s" % (intent['intentName'], direction))
-
-                elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
-                    pubnub.publish().channel(pn_chatroom_channel).message(
-                        chatbot_handle[0] + ' ' + from_handle + ' ' + intent['message']).async(my_publish_callback)
-                elif intent['dialogState'] in ['HelpIntent']:
-                    help_text = "welcome to lex. Chat with your neighbor. To ask Amazon Lex a question select one of " \
-                                "the questions below. To respond to a question from lex prefix your response with '!'. "
-                    pubnub.publish().channel(pn_chatroom_channel).message(
-                        chatbot_handle[0] + ' ' + from_handle + ' ' + help_text).async(my_publish_callback)
-
-        except IndexError:
-            pass  # do nothing
-        except Exception as e:
-            print("problem: %s" % str(e))
-'''
 
 print("starting chatbot...")
 pn.add_listener(ChatbotPNCallback())
