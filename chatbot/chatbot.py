@@ -29,6 +29,8 @@ class ChatbotPNCallback(SubscribeCallback):
     def message(self, pubnub, message):
         try:
 
+            print("chatbot message recevied: %s" % str(message))
+
             # message notification from chatroom
             if message.channel == pn_chatroom_channel:
                 message_start = message.message.split()[1]
