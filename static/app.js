@@ -30,9 +30,9 @@ var app = {
     },
     'chatroomListener': function(obj){
         if (typeof obj.message === 'string' || obj.message instanceof String){
-            var chatText = ''+app.formatMessage(('@'+obj.message['from']+' '+obj.message['responseText']).replace( /[<>]/g, '' ));
+            var chatText = ''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' ));
         } else {
-            chatText = ''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' ));
+            chatText = ''+app.formatMessage(('@'+obj.message['from']+' '+obj.message['responseText']).replace( /[<>]/g, '' ));
         }
         $('#box').append(chatText);
         $('#box').scrollTop($('#box')[0].scrollHeight);
