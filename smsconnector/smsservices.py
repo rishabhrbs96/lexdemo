@@ -34,7 +34,7 @@ def get_sms():
 @post('/sms')
 def post_sms():
     print("Processing sms request")
-    print("Sending to channel: %s" % pn_smsrequest_channel)
+    print("Sending to channel: %s" % pn_chatbot_channel)
     message = {
         'responseChannel': pn_smsresponse_channel,
         'user': request.forms.get('From'),
