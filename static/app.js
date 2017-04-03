@@ -56,13 +56,13 @@ var app = {
         name = (name=='')?'stranger':name;
         var sez = $('#message').val();
         sez = (sez=='')?'says nothing':sez;
+        sez = sez.slice(0,2) == '! ' ? sez : (sez.slice(0,1)+" "+sez.slice(1));
         if(sez[0]=='!'){
-            sez = sez.slice(0,1)+" "+sez.slice(1);
             var chatbotRequest = {
                 "from": "chatroom",
                 "responseChannel": app.chatroomChannel,
                 "user": name,
-                "requestText": sez
+                "requestText": sez.slice(2)
             };
             app.chatroom.publish({channel: app.chatbotChannel, message: chatbotRequest,x : ($('#message').val(''))});
         }
