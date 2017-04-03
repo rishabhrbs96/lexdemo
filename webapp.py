@@ -13,7 +13,8 @@ pubnub = {
     'pubnub_publish_key': os.environ.get('pubnub_publish_key', None),
     'pubnub_subscribe_key': os.environ.get('pubnub_subscribe_key', None),
     'pubnub_chatroom_channel': os.environ.get('pubnub_chatroom_channel', None),
-    'pubnub_chatbot_channel': os.environ.get('pubnub_chatbot_channel', None)
+    'pubnub_chatbot_channel': os.environ.get('pubnub_chatbot_channel', None),
+    'pubnub_chatbotlog_channel': os.environ.get('pubnub_chatbotlog_channel', None)
 }
 
 
