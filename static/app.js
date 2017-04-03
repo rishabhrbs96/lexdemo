@@ -29,8 +29,14 @@ var app = {
         $('#message').focus();
     },
     'chatroomListener': function(obj){
-        $('#box').append(''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' )));
+        if (typeof obj.message === 'string' || obj.message instanceof String){
+            var chatText = ''+app.formatMessage(('@'+obj.message['from']+' '+obj.message['responseText']).replace( /[<>]/g, '' ));
+        } else {
+            chatText = ''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' ));
+        }
+        $('#box').append(chatText);
         $('#box').scrollTop($('#box')[0].scrollHeight);
+
     },
     'chatbotListener': function(obj){
         if($('#monitor-slider').val()=='1'){
@@ -52,6 +58,13 @@ var app = {
         sez = (sez=='')?'says nothing':sez;
         if(sez[0]=='!'){
             sez = sez.slice(0,1)+" "+sez.slice(1);
+            var chatbotRequest = {
+                "from": "chatroom",
+                "responseChannel": app.chatroomChannel,
+                "user": name,
+                "requestText": sez
+            };
+            app.chatroom.publish({channel: app.chatbotChannel, message: chatbotRequest,x : ($('#message').val(''))});
         }
         var message = '@'+name+' '+sez;
         app.chatroom.publish({channel: app.chatroomChannel, message: message,x : ($('#message').val(''))});

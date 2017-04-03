@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 
 from bottle import get, post, request
 from pubnub.pnconfiguration import PNConfiguration
@@ -32,16 +33,18 @@ def get_sms():
 
 @post('/sms')
 def post_sms():
-    # receive sms
-    ani = request.forms.get('From')
-    ani = ani[1:] if ani[0] == '+' else ani
-    message = request.forms.get('Body')
-    print("Processing request from ani:%s, message:%s" % (
-        ani, message
-    ))
-    print("Sending to channel: %s"%pn_smsrequest_channel)
-    # post to pubnub so the chatbot can handle it
-    pn.publish().channel(pn_smsrequest_channel).message({'ani': ani, 'message': message}).async(my_publish_callback)
+    print("Processing sms request")
+    print("Sending to channel: %s" % pn_smsrequest_channel)
+    message = {
+        'responseChannel': pn_smsresponse_channel,
+        'user': request.forms.get('From'),
+        'requestText': request.forms.get('Body'),
+        'from': 'sms'
+    }
+    pprint(message)
+
+    # publish to pubnub so the chatbot can handle it
+    pn.publish().channel(pn_smsrequest_channel).message(message).async(my_publish_callback)
 
     # return an empty twiml response so as not to send message
     # we will handle this asynchronously using our pubnub listener below
