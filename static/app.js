@@ -32,7 +32,7 @@ var app = {
         if (typeof obj.message === 'string' || obj.message instanceof String){
             var chatText = ''+app.formatMessage((''+obj.message).replace( /[<>]/g, '' ));
         } else {
-            chatText = ''+app.formatMessage(('@'+obj.message['from']+' '+obj.message['responseText']).replace( /[<>]/g, '' ));
+            chatText = ''+app.formatMessage(('@'+obj.message['from']+' @'+obj.message['user']+' '+obj.message['responseText']).replace( /[<>]/g, '' ));
         }
         $('#box').append(chatText);
         $('#box').scrollTop($('#box')[0].scrollHeight);
