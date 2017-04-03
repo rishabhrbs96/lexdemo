@@ -160,62 +160,67 @@ def my_publish_callback(envelope, status):
 
 def log_it(content):
     print(str(content))
-    pn.publish().channel(pn_chatbot_channel).message(content).async(my_publish_callback)
+    pn.publish().channel(pn_chatbotlog_channel).message(content).async(my_publish_callback)
 
 
 def ask_lex(user, utterance):
-    log_it("asking lex for %s, '%s'" % (user, utterance))
-    intent = lex.ask_lex(utterance, user).json()
+    try:
+        log_it("asking lex for %s, '%s'" % (user, utterance))
+        intent = lex.ask_lex(utterance, user).json()
 
-    log_it("intent type: %s" % intent['dialogState'])
-    log_it(intent)
+        log_it("intent type: %s" % intent['dialogState'])
+        log_it(intent)
 
-    # Determine intent type  1. ready  2. need slot data  3. what?
-    if intent['dialogState'] == 'ReadyForFulfillment':
+        # Determine intent type  1. ready  2. need slot data  3. what?
+        if intent['dialogState'] == 'ReadyForFulfillment':
 
-        # Call third party service that matches intent passing slot data
-        log_it("intent name: %s" % intent['intentName'])
-        if intent['intentName'] == 'AirlineStatus':
-            log_it("Calling airline service...")
-            response = requests.get(coolservices_url + '/airline/' + intent['slots']['airline'], timeout=10)
-            result = response.json()
-            log_it(result)
-            return result['message']
+            # Call third party service that matches intent passing slot data
+            log_it("intent name: %s" % intent['intentName'])
+            if intent['intentName'] == 'AirlineStatus':
+                log_it("Calling airline service...")
+                response = requests.get(coolservices_url + '/airline/' + intent['slots']['airline'], timeout=10)
+                result = response.json()
+                log_it(result)
+                return result['message']
 
-        elif intent['intentName'] == 'WeatherForecast':
-            log_it("Calling weather service...")
-            response = requests.get(coolservices_url + '/weather/' + intent['slots']['city'], timeout=10)
-            result = response.json()
-            log_it(result)
-            return result['message']
+            elif intent['intentName'] == 'WeatherForecast':
+                log_it("Calling weather service...")
+                response = requests.get(coolservices_url + '/weather/' + intent['slots']['city'], timeout=10)
+                result = response.json()
+                log_it(result)
+                return result['message']
 
-        elif intent['intentName'] == 'FedExRate':
-            log_it("Calling FedEx rate service...")
-            response = requests.get(
-                coolservices_url + '/fedexrate/' + intent['slots']['fromCity'] + '/' + intent['slots'][
-                    'toCity'], timeout=10)
-            result = response.json()
-            log_it(result)
-            return result['message']
+            elif intent['intentName'] == 'FedExRate':
+                log_it("Calling FedEx rate service...")
+                response = requests.get(
+                    coolservices_url + '/fedexrate/' + intent['slots']['fromCity'] + '/' + intent['slots'][
+                        'toCity'], timeout=10)
+                result = response.json()
+                log_it(result)
+                return result['message']
 
-        # Use pubnub robot channel to talk to the robot
-        elif intent['intentName'] == 'RobotIntent':
-            log_it("Publish to robot service...")
-            direction = intent['slots']['direction'].lower()
-            pn.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
-            result = {'message': direction}
-            log_it(result)
-            return result['message']
+            # Use pubnub robot channel to talk to the robot
+            elif intent['intentName'] == 'RobotIntent':
+                log_it("Publish to robot service...")
+                direction = intent['slots']['direction'].lower()
+                pn.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
+                result = {'message': direction}
+                log_it(result)
+                return result['message']
 
-    # deal with conversation, lex maintains state based on user
-    elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
-        return intent['message']
+        # deal with conversation, lex maintains state based on user
+        elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
+            return intent['message']
 
-    # return help
-    elif intent['dialogState'] in ['HelpIntent']:
-        help_text = "Welcome to lex. Chat with your neighbor. To ask Amazon Lex a question select one of " \
-                    "the questions below. To respond to a question from lex prefix your response with '!'. "
-        return help_text
+        # return help
+        elif intent['dialogState'] in ['HelpIntent']:
+            help_text = "Welcome to lex. Chat with your neighbor. To ask Amazon Lex a question select one of " \
+                        "the questions below. To respond to a question from lex prefix your response with '!'. "
+            return help_text
+
+    except Exception as e:
+        print("Exception: %s" % str(e))
+        return "Sorry, I didn't understand your question."
 
 
 print("starting chatbot...")

@@ -13,7 +13,7 @@ pnconfig = PNConfiguration()
 pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
 pnconfig.subscribe_key = os.environ.get('pubnub_subscribe_key', None)
 
-pn_smsrequest_channel = os.environ.get('pubnub_smsrequest_channel', None)
+pn_chatbot_channel = os.environ.get('pubnub_chatbot_channel', None)
 pn_smsresponse_channel = os.environ.get('pubnub_smsresponse_channel', None)
 
 pn = PubNub(pnconfig)
@@ -44,7 +44,7 @@ def post_sms():
     pprint(message)
 
     # publish to pubnub so the chatbot can handle it
-    pn.publish().channel(pn_smsrequest_channel).message(message).async(my_publish_callback)
+    pn.publish().channel(pn_chatbot_channel).message(message).async(my_publish_callback)
 
     # return an empty twiml response so as not to send message
     # we will handle this asynchronously using our pubnub listener below

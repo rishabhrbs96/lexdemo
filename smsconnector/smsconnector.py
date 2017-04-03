@@ -10,7 +10,6 @@ pnconfig = PNConfiguration()
 pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
 pnconfig.subscribe_key = os.environ.get('pubnub_subscribe_key', None)
 
-pn_smsrequest_channel = os.environ.get('pubnub_smsrequest_channel', None)
 pn_smsresponse_channel = os.environ.get('pubnub_smsresponse_channel', None)
 
 pn = PubNub(pnconfig)

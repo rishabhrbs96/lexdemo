@@ -13,7 +13,7 @@ pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
 pnconfig.subscribe_key = os.environ.get('pubnub_subscribe_key', None)
 pubnub = PubNub(pnconfig)
 
-pn_chatbot_channel = os.environ.get('pubnub_chatbot_channel', None)
+pn_chatbotlog_channel = os.environ.get('pubnub_chatbotlog_channel', None)
 pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
 
 
@@ -115,7 +115,7 @@ class MySubscribeCallback(SubscribeCallback):
     def log_it(content):
         print(str(content))
         # todo get stats - ultrasonic, voltage, last direction, image
-        pubnub.publish().channel(pn_chatbot_channel).message(content).async(my_publish_callback)
+        pubnub.publish().channel(pn_chatbotlog_channel).message(content).async(my_publish_callback)
 
     @staticmethod
     def get_status(action):

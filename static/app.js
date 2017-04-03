@@ -1,18 +1,18 @@
 
 var app = {
     'chatroom' : {},
-    'chatbot' : {},
+    'chatbotlog' : {},
     'init': function(){
         this.chatroomChannel = PUBNUB_CHATROOM_CHANNEL;
+        this.chatbotChannel = PUBNUB_CHATBOT_CHANNEL;
         this.chatroom =  new PubNub({ publishKey : PUBNUB_PUBLISH_KEY, subscribeKey : PUBNUB_SUBSCRIBE_KEY});
-        // this.chatroom =  new PubNub({ publishKey : 'demo', subscribeKey : 'demo'});
         this.chatroom.addListener({message:this.chatroomListener});
         this.chatroom.subscribe({channels:[this.chatroomChannel]});
 
-        this.chatbotChannel = PUBNUB_CHATBOT_CHANNEL;
-        this.chatbot =  new PubNub({ subscribeKey : PUBNUB_SUBSCRIBE_KEY});
-        this.chatbot.addListener({message:this.chatbotListener});
-        this.chatbot.subscribe({channels:[this.chatbotChannel]});
+        this.chatbotLogChannel = PUBNUB_CHATBOTLOG_CHANNEL;
+        this.chatbotLog =  new PubNub({ subscribeKey : PUBNUB_SUBSCRIBE_KEY});
+        this.chatbotLog.addListener({message:this.chatbotLogListener});
+        this.chatbotLog.subscribe({channels:[this.chatbotLogChannel]});
 
         // $('#message').keyup(this.checkForEnter);
         $('#send-button').click(this.publishMessage);
@@ -38,7 +38,7 @@ var app = {
         $('#box').scrollTop($('#box')[0].scrollHeight);
 
     },
-    'chatbotListener': function(obj){
+    'chatbotLogListener': function(obj){
         if($('#monitor-slider').val()=='1'){
             $('#bot').append('<pre>'+JSON.stringify(obj.message, null, ' ')+'</pre>');
             $('#bot').scrollTop($('#bot')[0].scrollHeight);
