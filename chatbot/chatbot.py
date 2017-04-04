@@ -25,19 +25,9 @@ chatbot_handle = ['fred']
 
 
 class ChatbotPNCallback(SubscribeCallback):
-
     # inherited from PubNub's SubscribeCallback
     def message(self, pubnub, message):
         try:
-
-            chatbot_request = {
-                'responseChannel':'',
-                'user':'',
-                'requestText':'',
-                'from':'',
-                'response':''
-            }
-
             pprint(vars(message))
 
             chatbot_request = message.message
@@ -46,31 +36,9 @@ class ChatbotPNCallback(SubscribeCallback):
                 chatbot_request['from'] = chatbot_handle[0]
                 user = re.sub(r'\W+', '', chatbot_request['user'])
                 chatbot_request['responseText'] = ask_lex(user, chatbot_request['requestText'])
-                pubnub.publish().channel(chatbot_request['responseChannel']).message(chatbot_request).async(my_publish_callback)
-            #
-            # # message notification from chatroom
-            # if message.channel == pn_chatroom_channel:
-            #     message_start = message.message.split()[1]
-            #     from_handle = message.message.split()[0]
-            #     if message_start in chatbot_handle and from_handle not in chatbot_handle:
-            #         log_it("relevant chatbot located...")
-            #         user = from_handle[1:]
-            #         utterance = ' '.join(message.message.split()[2:])
-            #         response_text = ask_lex(user, utterance)
-            #         pubnub.publish().channel(pn_chatroom_channel).message(
-            #             chatbot_handle[0] + ' ' + from_handle + ' ' + response_text).async(my_publish_callback)
-            #     else:
-            #         log_it("Chatroom message ignored")
-            #
-            # # message notification from smsconnector
-            # elif message.channel == pn_smsrequest_channel:
-            #     log_it("relevant sms request located...")
-            #     response = {
-            #         'ani': message.message['ani'],
-            #         'message': ask_lex(message.message['ani'], message.message['message'])
-            #     }
-            #     pubnub.publish().channel(pn_smsresponse_channel).message(response).async(my_publish_callback)
-            #
+                pubnub.publish().channel(chatbot_request['responseChannel']).message(chatbot_request).async(
+                    chatbot_publish_callback)
+
             else:
                 log_it("Message ignored")
         except IndexError as e:
@@ -92,64 +60,9 @@ class ChatbotPNCallback(SubscribeCallback):
         elif status.category == PNStatusCategory.PNDecryptionErrorCategory:
             pass
 
-    # our additional methods not in SubscribeCallback
-    # def ask_lex(self, pubnub,  user, utterance):
-    #     log_it("asking lex for %s, '%s'" % (user, utterance))
-    #     intent = lex.ask_lex(utterance, user).json()
-    #
-    #     log_it("intent type: %s" % intent['dialogState'])
-    #     log_it(intent)
-    #
-    #     # Determine intent type  1. ready  2. need slot data  3. what?
-    #     if intent['dialogState'] == 'ReadyForFulfillment':
-    #
-    #         # Call third party service that matches intent passing slot data
-    #         log_it("intent name: %s" % intent['intentName'])
-    #         if intent['intentName'] == 'AirlineStatus':
-    #             log_it("Calling airline service...")
-    #             response = requests.get(coolservices_url + '/airline/' + intent['slots']['airline'], timeout=10)
-    #             result = response.json()
-    #             log_it(result)
-    #             return result['message']
-    #
-    #         elif intent['intentName'] == 'WeatherForecast':
-    #             log_it("Calling weather service...")
-    #             response = requests.get(coolservices_url + '/weather/' + intent['slots']['city'], timeout=10)
-    #             result = response.json()
-    #             log_it(result)
-    #             return result['message']
-    #
-    #         elif intent['intentName'] == 'FedExRate':
-    #             log_it("Calling FedEx rate service...")
-    #             response = requests.get(
-    #                 coolservices_url + '/fedexrate/' + intent['slots']['fromCity'] + '/' + intent['slots'][
-    #                     'toCity'], timeout=10)
-    #             result = response.json()
-    #             log_it(result)
-    #             return result['message']
-    #
-    #         # Use pubnub robot channel to talk to the robot
-    #         elif intent['intentName'] == 'RobotIntent':
-    #             log_it("Publish to robot service...")
-    #             direction = intent['slots']['direction'].lower()
-    #             pubnub.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
-    #             result = {'message': direction}
-    #             log_it(result)
-    #             return result['message']
-    #
-    #     # deal with conversation, lex maintains state based on user
-    #     elif intent['dialogState'] in ('ElicitIntent', 'ElicitSlot'):
-    #         return intent['message']
-    #
-    #     # return help
-    #     elif intent['dialogState'] in ['HelpIntent']:
-    #         help_text = "Welcome to lex. Chat with your neighbor. To ask Amazon Lex a question select one of " \
-    #                     "the questions below. To respond to a question from lex prefix your response with '!'. "
-    #         return help_text
-
 
 # callback specified when publishing to channel
-def my_publish_callback(envelope, status):
+def chatbot_publish_callback(envelope, status):
     if not status.is_error():
         print("message published successfully")
         pass  # Message successfully published to specified chatroomChannel.
