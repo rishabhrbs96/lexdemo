@@ -1,7 +1,7 @@
 import os
 from pprint import pprint
 
-from bottle import get, post, request, run
+from bottle import get, post, request
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from twilio import twiml
@@ -14,9 +14,6 @@ pn = PubNub(pnconfig)
 
 pn_chatbot_channel = os.environ.get('pubnub_chatbot_channel', None)
 pn_smsresponse_channel = os.environ.get('pubnub_smsresponse_channel', None)
-
-HOST = '0.0.0.0'
-PORT = port = int(os.environ.get("PORT", 5000))
 
 
 @get('/')
@@ -42,22 +39,9 @@ def post_sms():
     pprint(message)
 
     # publish to pubnub so the chatbot can handle it
-    pn.publish().channel(pn_chatbot_channel).message(message).async(chatbot_publish_callback)
+    pn.publish().channel(pn_chatbot_channel).message(message).sync()
 
     # return an empty twiml response so as not to send message
     # we will handle this asynchronously using our pubnub listener below
     twiml_response = twiml.Response()
     return str(twiml_response)
-
-
-# callback specified when publishing to channel
-def chatbot_publish_callback(envelope, status):
-    if not status.is_error():
-        print("message published successfully")
-        pass  # Message successfully published to specified chatroomChannel.
-    else:
-        print("message published failure")
-        pass  # Handle message publish error. Check 'category' property to find out possible issue
-
-if __name__ == '__main__':
-    run(host=HOST, port=PORT)

@@ -2,6 +2,7 @@ import os
 from bottle import run, template, static_file, route, get, TEMPLATE_PATH
 
 import coolwebservices
+from smsconnector import smsservices
 
 TEMPLATE_PATH.insert(0, os.environ.get('template_path', './views'))
 

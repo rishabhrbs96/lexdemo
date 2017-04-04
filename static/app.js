@@ -56,7 +56,9 @@ var app = {
         name = (name=='')?'stranger':name;
         var sez = $('#message').val();
         sez = (sez=='')?'says nothing':sez;
-        sez = sez.slice(0,2) == '! ' ? sez : (sez.slice(0,1)+" "+sez.slice(1));
+        if(sez.length > 2 && sez[0]=='!' && sez[1]!=' '){
+            sez = sez[0] + ' ' + sez.slice(1);
+        }
         if(sez[0]=='!'){
             var chatbotRequest = {
                 "from": "chatroom",
