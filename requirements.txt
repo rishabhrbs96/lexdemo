@@ -1,3 +1,4 @@
+twilio
 appdirs==1.4.0
 aws-requests-auth==0.3.0
 bottle==0.12.13
