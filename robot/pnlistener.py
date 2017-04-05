@@ -111,11 +111,6 @@ class MySubscribeCallback(SubscribeCallback):
         else:
             print("some other status: %d" % status)  # some other status
 
-    @staticmethod
-    def log_it(content):
-        print(str(content))
-        # todo get stats - ultrasonic, voltage, last direction, image
-        pubnub.publish().channel(pn_chatbotlog_channel).message(content).async(my_publish_callback)
 
     @staticmethod
     def get_status(action):
@@ -132,6 +127,10 @@ def my_publish_callback(envelope, status):
     else:
         pass  # Handle message publish error. Check 'category' property to find out possible issue
 
+def log_it(content):
+    print(str(content))
+    # todo get stats - ultrasonic, voltage, last direction, image
+    pubnub.publish().channel(pn_chatbotlog_channel).message(content).async(my_publish_callback)
 
 if __name__ == '__main__':
     print("waiting 30 seconds for network connectivity...")
