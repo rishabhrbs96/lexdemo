@@ -27,6 +27,9 @@ def server_static(filepath):
 def get_fredsez():
     return template('fredsez', **pubnub)
 
+@get('/links')
+def get_links():
+    return template('links')
 
 if __name__ == '__main__':
     run(host=HOST, port=PORT)
