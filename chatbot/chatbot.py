@@ -73,7 +73,7 @@ def chatbot_publish_callback(envelope, status):
 
 def log_it(content):
     print(str(content))
-    pn.publish().channel(pn_chatbotlog_channel).message(content).async(my_publish_callback)
+    pn.publish().channel(pn_chatbotlog_channel).message(content).async(chatbot_publish_callback)
 
 
 def ask_lex(user, utterance):
