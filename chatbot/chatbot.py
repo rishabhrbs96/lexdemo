@@ -33,6 +33,7 @@ class ChatbotPNCallback(SubscribeCallback):
             chatbot_request = message.message
             if chatbot_request['from'] not in chatbot_handle:
                 log_it('Processing chatbot request')
+                log_it(chatbot_request)
                 chatbot_request['from'] = chatbot_handle[0]
                 user = re.sub(r'\W+', '', chatbot_request['user'])
                 chatbot_request['responseText'] = ask_lex(user, chatbot_request['requestText'])
@@ -116,7 +117,7 @@ def ask_lex(user, utterance):
             elif intent['intentName'] == 'RobotIntent':
                 log_it("Publish to robot service...")
                 direction = intent['slots']['direction'].lower()
-                pn.publish().channel(pn_robot_channel).message(direction).async(my_publish_callback)
+                pn.publish().channel(pn_robot_channel).message(direction).async(chatbot_publish_callback)
                 result = {'message': direction}
                 log_it(result)
                 return result['message']
