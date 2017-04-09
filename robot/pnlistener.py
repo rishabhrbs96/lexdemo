@@ -1,6 +1,8 @@
 import os
 import time
 
+import logging
+from pubnub import set_stream_logger
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
@@ -11,7 +13,11 @@ import gopigo_client
 pnconfig = PNConfiguration()
 pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
 pnconfig.subscribe_key = os.environ.get('pubnub_subscribe_key', None)
+
+set_stream_logger('pubnub', logging.DEBUG)
+
 pubnub = PubNub(pnconfig)
+
 
 pn_chatbotlog_channel = os.environ.get('pubnub_chatbotlog_channel', None)
 pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
@@ -109,7 +115,7 @@ class MySubscribeCallback(SubscribeCallback):
         elif status.category == PNStatusCategory.PNDecryptionErrorCategory:
             pass
         else:
-            print("some other status: %d" % status)  # some other status
+            print("some other status:")  # some other status
 
     @staticmethod
     def get_status(action):
@@ -134,8 +140,6 @@ def log_it(content):
 
 
 if __name__ == '__main__':
-    print("waiting 30 seconds for network connectivity...")
-    time.sleep(30)
     print("initialize robot...")
     gopigo_client.servo(90)
     gopigo_client.set_speed(MySubscribeCallback.FAST_SPEED)
