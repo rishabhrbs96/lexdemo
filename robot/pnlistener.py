@@ -138,7 +138,7 @@ if __name__ == '__main__':
     time.sleep(30)
     print("initialize robot...")
     gopigo_client.servo(90)
-    gopigo_client.set_speed(MySubscribeCallback.SLOW_SPEED)
+    gopigo_client.set_speed(MySubscribeCallback.FAST_SPEED)
     print("starting pnlistener...")
     pubnub.add_listener(MySubscribeCallback())
     pubnub.subscribe().channels([pn_robot_channel]).execute()
