@@ -97,11 +97,11 @@ class MySubscribeCallback(SubscribeCallback):
         if status.category == PNStatusCategory.PNUnexpectedDisconnectCategory:
             print("Connectivity lost...")
             pass  # This event happens when radio / connectivity is lost
-            pubnub.reconnect()
+            exit()
         elif status.category == PNStatusCategory.PNTimeoutCategory:
             print("PN Timeout...")
             pass
-            pubnub.reconnect()
+            exit()
         elif status.category == PNStatusCategory.PNConnectedCategory:
             pass
         elif status.category == PNStatusCategory.PNReconnectedCategory:
