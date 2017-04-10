@@ -4,7 +4,7 @@ import time
 import logging
 from pubnub import set_stream_logger
 from pubnub.callbacks import SubscribeCallback
-from pubnub.enums import PNStatusCategory
+from pubnub.enums import PNStatusCategory, PNReconnectionPolicy
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 
@@ -13,11 +13,11 @@ import gopigo_client
 pnconfig = PNConfiguration()
 pnconfig.publish_key = os.environ.get('pubnub_publish_key', None)
 pnconfig.subscribe_key = os.environ.get('pubnub_subscribe_key', None)
+pnconfig.reconnect_policy = PNReconnectionPolicy.LINEAR
 
 set_stream_logger('pubnub', logging.DEBUG)
 
 pubnub = PubNub(pnconfig)
-
 
 pn_chatbotlog_channel = os.environ.get('pubnub_chatbotlog_channel', None)
 pn_robot_channel = os.environ.get('pubnub_robot_channel', None)
@@ -102,8 +102,8 @@ class MySubscribeCallback(SubscribeCallback):
     def status(self, pubnub, status):
         if status.category == PNStatusCategory.PNUnexpectedDisconnectCategory:
             print("Connectivity lost...")
+            pubnub.reconnect()
             pass  # This event happens when radio / connectivity is lost
-            exit()
         elif status.category == PNStatusCategory.PNTimeoutCategory:
             print("PN Timeout...")
             pass
